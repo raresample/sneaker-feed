@@ -25,3 +25,12 @@
     )
     rgb(var(--background-start-rgb));
 } */
+
+.image-container {
+  z-index: -1;
+}
+
+.product-image { 
+  position: relative;
+  top: -100px;
+}
