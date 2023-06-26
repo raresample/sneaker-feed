@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react"
 import Image from "next/image";
 import Navbar from "@/components/Navbar";
+import Search from "@/components/Search";
 
 export default function Home() {
   const [dataResponse, setDataResponse] = useState([]);
-  const [compareDate, setCompareDate] = useState(new Date().toISOString());
+  const [title, setTitle] = useState('');
 
   useEffect(() => {
     async function getInitialData() {
@@ -14,37 +15,25 @@ export default function Home() {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            compareDate: compareDate,
+            title: title,
           }),
         };
         const response = await fetch(apiUrlEndpoint, postData);
         const res = await response.json();
-        // console.log(res.products);
+        console.log(res.products);
         setDataResponse(res.products);
-        setCompareDate(res.products[res.products.length - 1]?.scrapedate);
       } catch (error) {
         console.error("Error fetching initial data:", error);
       }
     }
 
     getInitialData();
-  }, []);
-
-  useEffect(() => {
-    async function getPageData() {
-      const apiUrlEndpoint = `/api/data-search`;
-      const response = await fetch(apiUrlEndpoint);
-      const res = await response.json();
-      console.log(res.products);
-      setDataResponse(res.products);
-    }
-    getPageData();
-  }, []);
-
+  }, [title]);
 
   return (
     <main className="mt-24 mb-8">
       <Navbar />
+      <Search getSearchResults={(results) => setTitle(results)} />
       {dataResponse.map((product) => {
         const image = product.images.split("|")[0];
         const productUrl = `/products/${product.sku}`

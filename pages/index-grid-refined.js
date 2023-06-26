@@ -1,18 +1,18 @@
 import { useEffect, useState } from "react"
 import Navbar from "@/components/Navbar";
-import Pagination from "@/components/Pagination";
+import PaginationRefined from "@/components/PaginationRefined";
 
 export default function Home() {
   const [dataResponse, setDataResponse] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [productsPerPage, setProductsPerPage] = useState(10);
+  const [productsPerPage, setProductsPerPage] = useState(12);
 
   useEffect(() => {
     async function getPageData() {
       const apiUrlEndpoint = `/api/data-paginated`;
       const response = await fetch(apiUrlEndpoint);
       const res = await response.json();
-      // console.log(res.products);
+      console.log(res.products);
       setDataResponse(res.products);
     }
     getPageData();
@@ -23,26 +23,33 @@ export default function Home() {
   const currentProducts = dataResponse.slice(firstPostIndex, lastPostIndex);
 
   return (
-    <main className="mt-16 mb-8">
+    <main className="mt-16 mb-8 bg-slate-100">
       <Navbar />
-      <div>
+
+      {/* grid experiment */}
+      <section className="mx-12 mb-8 flex justify-center">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-4 gap-y-2">
           {currentProducts.map((product) => {
             const image = product.images.split("|")[0];
             const productUrl = `/products/${product.sku}`
             return (
-              <><div className="mb-8 flex justify-center" key={product.sku}>
-                <a href={productUrl} className="w-full flex flex-col items-center bg-white border border-gray-200 rounded-lg shadow md:flex-row md:max-w-xl hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
-                  <img className="object-cover w-full rounded-t-lg h-96 md:h-auto md:w-48 md:rounded-none md:rounded-l-lg" src={`${image}`} alt="" />
-                  <div className="flex flex-col justify-between p-4 leading-normal">
-                    <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{product.title}</h5>
-                    <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">We could put a brief product description here.</p>
+              <><div className="max-w-s mb-2 bg-orange-100 border-2 border-black" key={product.sku}>
+                <a href={productUrl}>
+                  <img className="w-full"
+                      src={`${image}`}
+                      alt="product" />
+                  <div className="px-6 py-4 grid grid-cols-3">
+                      <h4 className="mb-1 text-xl font-semibold tracking-tight text-gray-800 col-span-2">{product.title}</h4>
+                      <h5 className="flex justify-end pt-1">{product.price}</h5>
+                      {/* <p className="leading-normal text-gray-700">We could put a brief product description here.</p> */}
                   </div>
                 </a>
               </div></>
             );
           })}
-      </div>
-      <Pagination
+        </div>        
+      </section>
+      <PaginationRefined
         totalProducts={dataResponse.length}
         productsPerPage={productsPerPage}
         setCurrentPage={setCurrentPage}

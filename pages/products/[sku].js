@@ -21,7 +21,9 @@ export default function Home() {
       const response = await fetch(apiUrlEndpoint, postData);
       const res = await response.json();
       console.log(res.products);
+      console.log("[sku].js")
       setDataResponse(res.products);
+      console.log("dataResonse: ", dataResponse);
     }
     getPageData();
   }, [router.query.id, router.isReady]);
