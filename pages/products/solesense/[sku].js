@@ -2,6 +2,10 @@ import { useEffect, useState } from "react"
 import { useRouter } from "next/router";
 import Navbar from "@/components/Navbar";
 
+import { Inter } from 'next/font/google'
+
+const inter = Inter({ subsets: ['latin'] })
+
 export default function Home() {
   const router = useRouter();
   const { sku } = router.query;
@@ -27,7 +31,7 @@ export default function Home() {
     getPageData();
   }, [router.query.id, router.isReady]);
   return (
-    <main className="mt-24">
+    <main className={`mt-24 ${inter.className}`}>
       <Navbar />
         <div id="top" className="mx-4 mb-8 flex">
           <div className="w-1/2 border-2 pt-6">
